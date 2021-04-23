@@ -15,7 +15,7 @@ gui.title("Scute Picker")
 pagenum = 1
 
 img_list = []
-folder_path = None
+folder_path = ""
 
 image_number = 0
 
@@ -63,6 +63,7 @@ def page1():
         folder_path = folderPath.get() + '/*'
 
     def change_loading_text():
+        print(folder_path.strip())
         if folder_path is None or folder_path.strip() == "":
             messagebox.showerror(title="Error", message="No Folder Selected")
         else:
@@ -180,6 +181,17 @@ def page2():
 
         gui.destroy()
 
+    def undo():
+        global coords
+        if not coords:
+            messagebox.showerror(title="Error", message="No Coordinates to Undo")
+
+        else:
+            coords.pop()
+            dict[str(img_list[image_number])] = coords
+            canvas.delete("dot")
+            load_dots()
+
 
     def load_dots():
         global coords
@@ -218,6 +230,8 @@ def page2():
     reset_button.pack()
     reject_button = Button(gui, text="Reject", command=reject, pady = 10)
     reject_button.pack()
+    undo_button = Button(gui, text="Undo", command=undo, pady=10)
+    undo_button.pack()
     done_button = Button(gui, text="Done", command=save, pady=10)
     done_button.pack()
     image_number_label = Label(gui, textvariable=image_indicator)
